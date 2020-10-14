@@ -16,7 +16,6 @@ export class BufferAudioPlayer extends IPlayer {
 
   public constructor() {
     super();
-    this.newContext();
   }
 
   public get analyzer() {
@@ -73,11 +72,12 @@ export class BufferAudioPlayer extends IPlayer {
   public stop() {
     this._position = 0;
     this._playing = false;
-    this.newContext();
     if(this._bufferSource) {
       this._bufferSource.stop();
+      this.destroyContext();
     }
     this._bufferSource = undefined;
+    this._buffer = undefined;
     this.dispatch('stop');
   }
 
@@ -103,11 +103,13 @@ export class BufferAudioPlayer extends IPlayer {
    */
   set buffer(buffer:ArrayBuffer) {
     if(buffer) {
+      this._ready = false;
       this.setupAudio(buffer);
     }
   }
 
   private async setupAudio(buffer:ArrayBuffer) {
+    this.newContext();
     this._buffer = await new Promise(r => this._context.decodeAudioData(buffer, r));
     this._ready = true;
     this.dispatch('ready');
@@ -141,6 +143,14 @@ export class BufferAudioPlayer extends IPlayer {
   private newContext() {
     this._context = new AudioContext();
     this._analyzerNode = this._context.createAnalyser();
+  }
+
+  private destroyContext() {
+    try {
+      this._context && this._context.close();
+    } catch(e) {
+      console.error('context already destroyed')
+    }
   }
 
 }

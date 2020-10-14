@@ -261,11 +261,10 @@ export class WPPlayer extends LitElement {
    * render helper for controls display
    */
   get controls() {
-    const play = this.player?.playing ? html`
-    <slot name="pause" @click=${() => this.player?.pause()}>${svgPause}</slot>` :
-    html`<slot name="play" @click=${() => this.player?.play()}>${svgPlay}</slot>`;
+    const pause = html`<slot name="pause" @click=${() => this.player?.pause()}>${svgPause}</slot>`;
+    const play = html`<slot name="play" @click=${() => this.player?.play()}>${svgPlay}</slot>`;
     const stop = html`<slot name="stop" @click=${() => this.player?.stop()}>${svgStop}</slot>`;
-    return this.player?.ready ? [play , stop] : [play];
+    return this.player?.ready ? [this.player?.playing ? pause : play , stop] : [play];
   }
 
   /**
