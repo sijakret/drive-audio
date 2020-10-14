@@ -1,0 +1,8 @@
+node_modules
+/extension
+/dist
+/dist-doc
+/coverage
+.DS_Store
+web-play-*.tgz
+test/bundle/dist/*
