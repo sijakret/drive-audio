@@ -16,7 +16,7 @@ const config = {
     'drive-audio': 'drive-audio'
   },
   output: {
-    path: path.resolve(__dirname, 'dist-doc', outDir),
+    path: path.resolve(__dirname, 'dist-app', outDir),
     publicPath,
     filename: '[name].js'
   },

@@ -1,8 +1,9 @@
 import {LitElement, html, css, customElement, property} from 'lit-element';
-import {run} from '../utils';
+import {run, mobileCheck} from '../utils';
 
-const FPS = 30;
-const FFTSIZE = 256;
+const MOBILE = mobileCheck();
+const FPS = MOBILE ? 20 : 30;
+const FFTSIZE = MOBILE ? 64 : 256;
 const MINDECIBELS = -100;
 const MAXDECIBELS = -40;
 const SMOOTH = 0.65;
