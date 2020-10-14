@@ -61,7 +61,7 @@ export class Player extends BufferAudioPlayer {
   }
 
   async load(fetchBuffer = options.prefetch) {
-    if(this.buffer) {
+    if(this.ready) {
       return;
     }
     const hit:any = await cacheHit(this.fileId);
@@ -70,7 +70,7 @@ export class Player extends BufferAudioPlayer {
       this.dispatch('loading');
       const {meta, buffer} = hit;
       this.name = meta.name;
-      this.buffer = buffer.slice(0);
+      fetchBuffer && this.loadBuffer(buffer.slice(0));
       // await new Promise(r => setTimeout(r, 300000));
       this._waitingForUser = false;
       this._initializing = false;
@@ -93,7 +93,7 @@ export class Player extends BufferAudioPlayer {
         this._loading = true;
         this.dispatch('loading');
         const buffer = await getFileBuffer(this.fileId, options);
-        this.buffer = buffer.slice(0);
+        this.loadBuffer(buffer.slice(0));
         this._loading = false;
         // cache fully
         this._waitingForUser = false;

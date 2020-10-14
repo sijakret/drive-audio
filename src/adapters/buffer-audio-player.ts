@@ -6,8 +6,8 @@ import {IPlayer} from '../interfaces';
 const TICK_MS = 200;
 
 export class BufferAudioPlayer extends IPlayer {
-  private _context: AudioContext = new AudioContext()
-  private _analyzerNode: AnalyserNode = new AnalyserNode(this._context)
+  private _context?: AudioContext
+  private _analyzerNode?: AnalyserNode
   private _buffer?: AudioBuffer
   private _bufferSource: AudioBufferSourceNode | undefined = undefined
   protected _ready: boolean = false
@@ -23,11 +23,10 @@ export class BufferAudioPlayer extends IPlayer {
   }
 
   public play() {
-    if(!this._buffer) return;
+    if(!this._buffer || !this._context || !this._analyzerNode) return;
     if(this._bufferSource) {
       this.pause();
     } else {
-      this._context.resume();
       this._bufferSource = this._context.createBufferSource();
       this._bufferSource.buffer = this._buffer;
       this._bufferSource.connect(this._context.destination);
@@ -46,7 +45,6 @@ export class BufferAudioPlayer extends IPlayer {
       this._playing = false;
       this._bufferSource.stop();
       this._bufferSource = undefined;
-      this._context.suspend();
       this.dispatch('pause');
     } else {
       this.play();
@@ -60,7 +58,6 @@ export class BufferAudioPlayer extends IPlayer {
       }
       this._bufferSource.stop();
       this._bufferSource = undefined;
-      this._context.suspend();
       this._position = ms;
       this.play();
     } else {
@@ -78,6 +75,7 @@ export class BufferAudioPlayer extends IPlayer {
     }
     this._bufferSource = undefined;
     this._buffer = undefined;
+    this._ready = false;
     this.dispatch('stop');
   }
 
@@ -101,7 +99,7 @@ export class BufferAudioPlayer extends IPlayer {
   /**
    * set buffer and prepare everything
    */
-  set buffer(buffer:ArrayBuffer) {
+  loadBuffer(buffer:ArrayBuffer) {
     if(buffer) {
       this._ready = false;
       this.setupAudio(buffer);
@@ -110,7 +108,7 @@ export class BufferAudioPlayer extends IPlayer {
 
   private async setupAudio(buffer:ArrayBuffer) {
     this.newContext();
-    this._buffer = await new Promise(r => this._context.decodeAudioData(buffer, r));
+    this._buffer = await new Promise(r => this._context ? this._context.decodeAudioData(buffer, r) : undefined);
     this._ready = true;
     this.dispatch('ready');
   }

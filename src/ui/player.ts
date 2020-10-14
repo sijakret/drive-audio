@@ -47,6 +47,7 @@ export class WPPlayer extends LitElement {
   static get styles() {
     return css`
     :host {
+      -webkit-tap-highlight-color: transparent;
       --height: 26px;
       --primary-color: 214,93,188;
       --secondary-color: 170,227,234;
