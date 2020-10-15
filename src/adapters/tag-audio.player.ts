@@ -131,6 +131,7 @@ export class TagAudioPlayer extends IAudioPlayer {
     });
     this._tag.addEventListener('play', () => this._loading = false);
     this._tag.addEventListener('waiting', () => this._loading = true);
+    this._tag.addEventListener('ended', () => this.dispatch('ended'));
   }
 
   private destroyContext() {

@@ -3,7 +3,7 @@ import {styleMap} from 'lit-html/directives/style-map';
 import {until} from 'lit-html/directives/until';
 import {derivePlayer} from '../adapters';
 import {IAudioPlayer} from '../interfaces';
-import {formatMs} from '../utils';
+import {formatMs, mobileCheck} from '../utils';
 
 // svgs
 import svgPlay from './assets/play.svg';
@@ -13,6 +13,8 @@ import svgStop from './assets/stop.svg';
 import './initializer';
 import './visualizer';
 import {transition, slide, mark} from 'lit-transition';
+
+const MOBILE = mobileCheck();
 
 const EVENTS = [
   'name',
@@ -24,7 +26,7 @@ const EVENTS = [
   'play',
   'stop',
   'seek',
-  'finish'
+  'ended'
 ];
 
 @customElement('drive-audio-player')
@@ -219,9 +221,11 @@ export class WPPlayer extends LitElement {
         this.player?.seek(fraction * this.player.duration);
       }}
       @mousemove=${(e:MouseEvent) => {
-        const width = (e.target as HTMLElement).clientWidth;
-        this.hover = e.offsetX / width;
-        this.requestUpdate();
+        if(!MOBILE) {
+          const width = (e.target as HTMLElement).clientWidth;
+          this.hover = e.offsetX / width;
+          this.requestUpdate();
+        }
       }}
       @mouseout=${() => {
         this.hover = undefined;

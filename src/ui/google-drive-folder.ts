@@ -46,9 +46,9 @@ export class WPGoogleDriveFolder extends LitElement {
   }
 
   /**
-   * finish hook, play nex
+   * finish hook, play next
    */
-  private finishTrack(id:string) {
+  private trackEnded(id:string) {
     const next = (this.files.findIndex(i => i.id === id) + 1 )
       % this.files.length;
     this.files.forEach(f => {
@@ -79,7 +79,7 @@ export class WPGoogleDriveFolder extends LitElement {
     return filtered.map(f => {
         const url = 'https://drive.google.com/file/d/'+f.id;
         return html `<drive-audio-player name=${f.id} 
-        @finish=${() => this.finishTrack(f.id)}
+        @ended=${() => this.trackEnded(f.id)}
         @play=${() => this.playTrack(f.id)}
         url=${url}>
           <!-- hides stop button -->
