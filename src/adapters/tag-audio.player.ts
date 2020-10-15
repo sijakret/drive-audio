@@ -1,10 +1,12 @@
-import {IPlayer} from '../interfaces';
+import {IAudioPlayer} from '../interfaces';
 
 /**
  * generic audio tag-based player
  */
 
-export class TagAudioPlayer extends IPlayer {
+const AudioContext = window.AudioContext || (window as any).webkitAudioContext;  // Safari and old versions of Chrome
+
+export class TagAudioPlayer extends IAudioPlayer {
   private _context?: AudioContext
   private _analyzerNode?: AnalyserNode
   protected _tag:HTMLAudioElement = document.createElement('audio') as HTMLAudioElement
@@ -25,6 +27,7 @@ export class TagAudioPlayer extends IPlayer {
 
   init() {
     if(!this._context) {
+      this._tag.play();
       return new Promise(async r => {
         this._loading = true;
         this._tag.addEventListener('canplaythrough', () => {
