@@ -2,7 +2,7 @@ import {LitElement, html, css, customElement, property} from 'lit-element';
 import {run, mobileCheck} from '../utils';
 
 const MOBILE = mobileCheck();
-const FPS = MOBILE ? 20 : 30;
+const FPS = MOBILE ? 30 : 40;
 const FFTSIZE = MOBILE ? 64 : 512;
 const MINDECIBELS = -100;
 const MAXDECIBELS = -40;
