@@ -300,7 +300,7 @@ const i=new WeakMap,o=Object(r.e)(e=>t=>{if(!(t instanceof r.a)||t instanceof r.
       display: flex;
       width: 100%;
       height: var(--height);
-    }`}render(){return a.d`<div class="loader"></div>`}};ea=Jn([Object(a.c)("drive-audio-initializer")],ea);var ta=function(e,t,n,a){var r,i=arguments.length,o=i<3?t:null===a?a=Object.getOwnPropertyDescriptor(t,n):a;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,n,a);else for(var s=e.length-1;s>=0;s--)(r=e[s])&&(o=(i<3?r(o):i>3?r(t,n,o):r(t,n))||o);return i>3&&o&&Object.defineProperty(t,n,o),o};const na=$n(),aa=na?20:30,ra=na?64:512;let ia=class extends a.a{constructor(){super(),this.buffer=new Uint8Array,this.bias=new Float32Array,this.grads=[]}static get styles(){return a.b`
+    }`}render(){return a.d`<div class="loader"></div>`}};ea=Jn([Object(a.c)("drive-audio-initializer")],ea);var ta=function(e,t,n,a){var r,i=arguments.length,o=i<3?t:null===a?a=Object.getOwnPropertyDescriptor(t,n):a;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)o=Reflect.decorate(e,t,n,a);else for(var s=e.length-1;s>=0;s--)(r=e[s])&&(o=(i<3?r(o):i>3?r(t,n,o):r(t,n))||o);return i>3&&o&&Object.defineProperty(t,n,o),o};const na=$n(),aa=na?30:40,ra=na?64:512;let ia=class extends a.a{constructor(){super(),this.buffer=new Uint8Array,this.bias=new Float32Array,this.grads=[]}static get styles(){return a.b`
     :host {
       display: flex;
       align-items: flex-end;
