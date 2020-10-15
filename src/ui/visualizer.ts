@@ -10,7 +10,7 @@ const SMOOTH = 0.65;
 
 @customElement('drive-audio-visualizer')
 export class WPVisualizer extends LitElement {
-  @property() player?: any
+  @property() analyzer?: AnalyserNode
 
   private buffer:Uint8Array = new Uint8Array()
   private bias:Float32Array = new Float32Array()
@@ -55,7 +55,10 @@ export class WPVisualizer extends LitElement {
 
   // update bars
   tick() {
-    const analyzer:AnalyserNode = this.player.analyzer;
+    if(!this.analyzer) {
+      return;
+    }
+    const analyzer:AnalyserNode = this.analyzer;
     analyzer.fftSize = FFTSIZE;
     analyzer.smoothingTimeConstant = SMOOTH;
     analyzer.minDecibels = MINDECIBELS;

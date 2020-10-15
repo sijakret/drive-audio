@@ -2,7 +2,7 @@ import {LitElement, html, css, property, customElement} from 'lit-element';
 import {styleMap} from 'lit-html/directives/style-map';
 import {until} from 'lit-html/directives/until';
 import {derivePlayer} from '../adapters';
-import {IPlayer} from '../interfaces';
+import {IAudioPlayer} from '../interfaces';
 import {formatMs} from '../utils';
 
 // svgs
@@ -30,7 +30,7 @@ const EVENTS = [
 @customElement('drive-audio-player')
 export class WPPlayer extends LitElement {
   @property() url:String = '';
-  @property({attribute: false}) player?:IPlayer;
+  @property({attribute: false}) player?:IAudioPlayer;
   @property({attribute: false}) timeLeft:string = '';
   @property() hover:any = undefined;
 
@@ -284,7 +284,7 @@ export class WPPlayer extends LitElement {
    */
   get renderVisualizer() {
     return html`<slot style="position: absolute; width:100%; height: 100%;" name="visualizer">
-      <drive-audio-visualizer .player=${this.player}></drive-audio-visualizer>
+      <drive-audio-visualizer .analyzer=${this.player?.analyzer}></drive-audio-visualizer>
     </slot>`;
   }
 }

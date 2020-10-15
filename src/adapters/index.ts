@@ -1,5 +1,4 @@
 import {Player as googleAudioTag} from './google-drive/google-audio-tag';
-import {IPlayer} from '../interfaces';
 
 // avialable players
 export const players : any[] = [
@@ -7,7 +6,7 @@ export const players : any[] = [
 ]
 
 const _players = players;
-export function derivePlayer(url:String, players : any[] = _players):IPlayer|undefined {
+export function derivePlayer(url:String, players : any[] = _players) {
   const candidates = players.filter(p => p.canPlay(url));
   if(candidates.length > 0) {
     return new candidates[0](url); 

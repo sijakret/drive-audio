@@ -26,3 +26,9 @@ export abstract class IPlayer extends EventTarget {
 }
 
 export type IPlayerConstructor = new () => IPlayer
+
+export abstract class IAudioPlayer extends IPlayer {
+  abstract get analyzer(): AnalyserNode | undefined
+}
+
+export type IAudioPlayerConstructor = new () => IAudioPlayer
