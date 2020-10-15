@@ -118,12 +118,15 @@ export class WPPlayer extends LitElement {
       margin-right: 8px;
       overflow: visible;
       position: relative;
+      display: flex;
+      min-width: 0px;
     }
     [title] {
       height: 100%;
       line-height: var(--height);
       white-space: nowrap;
       overflow: hidden;
+      min-width: 0;
       padding-left: 8px;
       padding-right: 8px;
       text-overflow: ellipsis;

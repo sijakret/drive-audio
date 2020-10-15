@@ -3,7 +3,7 @@ import {run, mobileCheck} from '../utils';
 
 const MOBILE = mobileCheck();
 const FPS = MOBILE ? 20 : 30;
-const FFTSIZE = MOBILE ? 64 : 256;
+const FFTSIZE = MOBILE ? 64 : 512;
 const MINDECIBELS = -100;
 const MAXDECIBELS = -40;
 const SMOOTH = 0.65;
