@@ -14,7 +14,18 @@ import './initializer';
 import './visualizer';
 import {transition, slide, mark} from 'lit-transition';
 
-const EVENTS = ['name', 'ready', 'loading', 'tick', 'pause', 'resume', 'play', 'stop', 'seek', 'finish'];
+const EVENTS = [
+  'name',
+  'ready',
+  'loading',
+  'tick',
+  'pause',
+  'resume',
+  'play',
+  'stop',
+  'seek',
+  'finish'
+];
 
 @customElement('drive-audio-player')
 export class WPPlayer extends LitElement {
@@ -105,7 +116,7 @@ export class WPPlayer extends LitElement {
       flex: 1 0;
       margin-left: 8px;
       margin-right: 8px;
-      overflow: hidden;
+      overflow: visible;
       position: relative;
     }
     [title] {

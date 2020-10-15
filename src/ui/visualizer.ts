@@ -14,6 +14,7 @@ export class WPVisualizer extends LitElement {
 
   private buffer:Uint8Array = new Uint8Array()
   private bias:Float32Array = new Float32Array()
+  private grads:CanvasGradient[] = []
   private cancel: any
 
   static get styles() {
@@ -31,9 +32,10 @@ export class WPVisualizer extends LitElement {
     canvas {
       image-rendering: pixelated;
       width: 100%;
-      height: 100%;
+      height: 160%;
       fill: var(--p-col-l);
       color: var(--s-col-l);
+      background-color: var(--a-col);
     }`;
   }
 
@@ -64,7 +66,7 @@ export class WPVisualizer extends LitElement {
       const ctx = canvas.getContext('2d');
       if(!ctx) return;
       if(this.buffer.length !== length) {
-        const range = 255;
+        const range = 256;
         this.buffer = new Uint8Array(length);
         this.bias = new Float32Array(length).map((_,i) => 
           Math.pow(1.1, 1 + (i/length) * 6) - 0.2
@@ -72,15 +74,21 @@ export class WPVisualizer extends LitElement {
         canvas.width = length;
         canvas.height = range;
         const style = window.getComputedStyle(canvas);
-        const grd = ctx.createLinearGradient(0, 0, 0, range);
-        grd.addColorStop(0, style.getPropertyValue('color'));
-        grd.addColorStop(1, style.getPropertyValue('fill'));
-        ctx.fillStyle = grd;
+        this.grads = [];
+        for(let i = 0; i < range; ++i) {
+          const grd = ctx.createLinearGradient(0, 0, 0, range);
+          grd.addColorStop(1, style.getPropertyValue('color'));
+          grd.addColorStop(1.0-(i/range), style.getPropertyValue('fill'));
+          grd.addColorStop(0, style.getPropertyValue('background-color'));
+          this.grads.push(grd)
+        }
       }
       analyzer.getByteFrequencyData(this.buffer);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       this.buffer.forEach((v,i) => {
+        ctx.fillStyle = this.grads[v];
         v = v * this.bias[i];
+        //v = Math.max(0, Math.min(v,254))
         ctx.fillRect(i, 255-v, 1, v);
       })
     }

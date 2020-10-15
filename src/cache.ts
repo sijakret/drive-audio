@@ -2,32 +2,43 @@ import Dexie from 'dexie';
 
 const {name,version} = require('../package.json');
 
-interface ICacheEntry {
+interface IBufferCacheEntry {
   id?: string,
-  meta: Object,
-  buffer: ArrayBuffer
+  data: ArrayBuffer
+}
+
+interface IBlobCacheEntry {
+  id?: string,
+  data: Blob
+}
+
+interface IObjectCacheEntry {
+  id?: string,
+  data: Object
 }
 
 class Cache extends Dexie {
-  entries: Dexie.Table<ICacheEntry, number>; 
+  entries: Dexie.Table<
+    IObjectCacheEntry | IBufferCacheEntry | IBlobCacheEntry,
+    number>; 
 
   constructor () {
       super(`${name}-${version}`);
       this.version(1).stores({
-        entries: '&id, meta, buffer',
+        entries: '&id, data',
       });
       this.entries = this.table("entries");
   }
 }
 
+
 // create cache db
 const db = new Cache();
-
 // add to cache
-export async function cacheAdd(id:string, {meta, buffer}:any = {meta: Object, buffer:ArrayBuffer}) {
+export async function cacheAdd(id:string, data:Object|ArrayBuffer|Blob) {
   await db.open();
-  db.entries.add({id, meta, buffer});
-  return {meta , buffer};
+  db.entries.add({id, data});
+  return data;
 }
 
 // get cache hit if available
@@ -35,5 +46,8 @@ export async function cacheHit(id:string) {
   await db.open();
   const hits = await db.entries.where('id').equals(id);
   const first = await hits.first();
-  return !!first ? first : undefined;
+  if(!!first) {
+    return first.data;
+  }
+  return undefined;
 }

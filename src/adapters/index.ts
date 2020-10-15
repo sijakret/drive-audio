@@ -1,9 +1,9 @@
-import {Player as googleAudio} from './google-drive/google-audio';
+import {Player as googleAudioTag} from './google-drive/google-audio-tag';
 import {IPlayer} from '../interfaces';
 
-
+// avialable players
 export const players : any[] = [
-  googleAudio
+  googleAudioTag
 ]
 
 const _players = players;
