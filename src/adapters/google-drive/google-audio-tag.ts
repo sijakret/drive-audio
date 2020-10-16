@@ -1,14 +1,19 @@
 
 import {TagAudioPlayer} from '../tag-audio.player';
 import {getFileMeta, getFileBuffer} from './google-drive';
+//import {setupCSP} from '../../utils';
+//setupCSP();
 
 const options = {
   apiKey: 'AIzaSyDRbhyb-TWaXC4yYxksZB_5KekU4ujzLO4',
   prefetch: false
 };
 
+
 export class Player extends TagAudioPlayer {
   _fileId: string
+  _loadingMeta?: boolean
+  _progress?: number
 
   constructor(url:string) {
 
@@ -25,19 +30,36 @@ export class Player extends TagAudioPlayer {
     super(url);
 
     this._fileId = fileId;
-    this._tag.crossOrigin = "anonymous"
 
-    this._loading = true;
+    this._loadingMeta = true;
     getFileMeta(fileId, options).then(({name}) => {
       this.name = name;
-      this._loading = false;
+      this._loadingMeta = false;
       this.dispatch('name');
     });
   }
 
+  public get progress() {
+    return this._progress;
+  }
+
+  public get loading() {
+    return super.loading || !!this._loadingMeta;
+  }
+  public set loading(l:boolean) {
+    super.loading = l;
+  }
+
   async load() {
-    const blob = await getFileBuffer(this._fileId, options);
-    this._tag.src = window.URL.createObjectURL(blob);
+    const createObjectURL = window.URL.createObjectURL || (window as any).webkitUrl.createObjectURL;  // Safari and old versions of Chrome
+    const blob = await getFileBuffer(this._fileId, {
+      ...options,
+      onProgress: (p:number) => {
+        this._progress = p;
+        this.dispatch('loading');
+      }
+    });
+    this._tag.src = createObjectURL(blob);
   }
 
   static async canPlay(url:string) {

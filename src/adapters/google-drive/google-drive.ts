@@ -1,5 +1,6 @@
 
 import {cacheAdd,cacheHit} from '../../cache';
+import axios from 'axios';
 
 export async function getFolder(folderId: String, {apiKey} : any = {}) {
   const folder = await fetch(
@@ -24,16 +25,26 @@ export async function getFileMeta(fileId: string, {apiKey, cached = true} : any 
   return meta;
 }
 
-export async function getFileBuffer(fileId: String, {apiKey, cached = true} : any = {}) {
+export async function getFileBuffer(fileId: String, {
+    apiKey,
+    cached = true,
+    onProgress
+  } : any = {}) : Promise<ArrayBuffer|Blob> {
   const key = `blob://${fileId}`;
   if(cached) {
     const hit = await cacheHit(key);
-    if(hit) return hit;
+    if(hit) return hit as ArrayBuffer | Blob;
   }
-  const dataTransfer = await fetch(
-    `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`);
-  
-  const blob = await dataTransfer.blob();
+
+  // progress wrapper
+  const blob = (await axios({
+    responseType: 'blob',
+    url: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`,
+    onDownloadProgress: progress => {
+      onProgress && onProgress(progress.loaded / progress.total);
+    }
+  })).data;
+
   if(cached) {
     await cacheAdd(key, blob);
   }

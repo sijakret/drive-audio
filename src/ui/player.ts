@@ -72,6 +72,7 @@ export class WPPlayer extends LitElement {
       --p-col: rgba(var(--primary-color), 1.0);
       --p-col-h: rgba(var(--primary-color), 0.7);
       --p-col-l: rgba(var(--primary-color), 0.3);
+      --p-col-t: rgba(var(--primary-color), 0);
       --a-col: rgba(var(--alt-color), 1);
     }
 
@@ -234,7 +235,9 @@ export class WPPlayer extends LitElement {
         ${this.player.playing ? this.renderVisualizer : ''}
         ${this.renderSeek}
         ${this.player.loading ? html`
-        <drive-audio-initializer>loading..</drive-audio-initializer>
+        <drive-audio-initializer>${
+          (this.player as any).progress || 'loading..'
+        }</drive-audio-initializer>
         ` : this.trackTitle}
       </div>
       ${until(this.time, html``)}

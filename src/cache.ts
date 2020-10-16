@@ -42,7 +42,7 @@ export async function cacheAdd(id:string, data:Object|ArrayBuffer|Blob) {
 }
 
 // get cache hit if available
-export async function cacheHit(id:string) {
+export async function cacheHit(id:string) : Promise<Object | ArrayBuffer | Blob | undefined> {
   await db.open();
   const hits = await db.entries.where('id').equals(id);
   const first = await hits.first();

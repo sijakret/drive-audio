@@ -25,6 +25,7 @@ module.exports =  function(type, publicPath = '') {
       filename: '[name].js'
     },
     devServer: {
+      host: '0.0.0.0',
       historyApiFallback: {
         index: publicPath,
         disableDotRule: true

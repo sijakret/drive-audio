@@ -1,3 +1,5 @@
+import axios, { AxiosRequestConfig } from 'axios';
+
 
 export function formatMs(milliseconds: number) {
   let hours = `0${new Date(milliseconds).getHours() - 1}`.slice(-2);
@@ -42,7 +44,35 @@ export function setupCSP() {
   m.setAttribute('content', 
    [
      `default-src 'self' 'unsafe-inline' *`,
-     `media-src *.googleapis.com`
+     `media-src *.googleapis.com blob:`
    ].join('; '));
   document.head.appendChild(m);
 };
+
+export async function downloadBlob(req:AxiosRequestConfig, onProgress: Function) {
+  return (await axios({
+    ...req,
+    responseType: 'blob',
+    onProgress
+  } as AxiosRequestConfig)).data;
+  // const contentLength = dataTransfer.headers.get('content-length');
+  // if(!contentLength) {
+  //   throw new Error('contentLength header not sent by server')
+  // }
+  // const total = parseInt(contentLength, 10);
+  // let loaded = 0;
+  // return new Response(new ReadableStream({
+  //   async start(controller) {
+  //     const reader = dataTransfer.body?.getReader();
+  //     if(reader)
+  //     for (;;) {
+  //       const {done, value} = await reader.read();
+  //       if (done||!value) break;
+  //       loaded += value.byteLength;
+  //       onProgress({loaded, total})
+  //       controller.enqueue(value);
+  //     }
+  //     controller.close();
+  //   },
+  // }));
+}

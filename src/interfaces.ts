@@ -1,3 +1,4 @@
+import EventTarget from '@ungap/event-target'
 
 /**
  * interface to be implemented by audio player backents

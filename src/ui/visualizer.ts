@@ -35,7 +35,7 @@ export class WPVisualizer extends LitElement {
       height: 160%;
       fill: var(--p-col-l);
       color: var(--s-col-l);
-      border-color: var(--a-col);
+      border-color: var(--p-col-t);
       border: 0px;
     }`;
   }
@@ -81,9 +81,8 @@ export class WPVisualizer extends LitElement {
         this.grads = [];
         for(let i = 0; i < range; ++i) {
           const grd = ctx.createLinearGradient(0, 0, 0, range);
-          grd.addColorStop(1, style.getPropertyValue('color'));
+          grd.addColorStop(1, style.getPropertyValue('border-color'));
           grd.addColorStop(1.0-(i/range), style.getPropertyValue('fill'));
-          grd.addColorStop(0, style.getPropertyValue('border-color'));
           this.grads.push(grd)
         }
       }

@@ -27,13 +27,15 @@ export class TagAudioPlayer extends IAudioPlayer {
 
   init() {
     if(!this._context) {
+      document.body.appendChild(this._tag);
+
+      this.createContext();
       this._tag.play();
       return new Promise(async r => {
-        this._loading = true;
+        this.loading = true;
         this._tag.addEventListener('canplaythrough', () => {
           // setup code
-          this.createContext();
-          this._loading = false;
+          this.loading = false;
           this._ready = true;
           r();
         }, {
@@ -84,7 +86,7 @@ export class TagAudioPlayer extends IAudioPlayer {
   }
 
   public set loading(loading:boolean) {
-    this.loading = loading;
+    this._loading = loading;
     this.dispatch('loading');
   }
 
@@ -121,16 +123,17 @@ export class TagAudioPlayer extends IAudioPlayer {
 
   private createContext() {
     this._context = new AudioContext();
+    (window as any)._context = this._context;
     const node = this._context.createMediaElementSource(this._tag);
     this._analyzerNode = this._context.createAnalyser();
     node.connect(this._context.destination);
     node.connect(this._analyzerNode);
     this._tag.addEventListener('timeupdate', () => {
-      this._loading = false;
+      this.loading = false;
       this.dispatch('tick');
     });
-    this._tag.addEventListener('play', () => this._loading = false);
-    this._tag.addEventListener('waiting', () => this._loading = true);
+    this._tag.addEventListener('play', () => this.loading = false);
+    this._tag.addEventListener('waiting', () => this.loading = true);
     this._tag.addEventListener('ended', () => this.dispatch('ended'));
   }
 

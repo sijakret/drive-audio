@@ -71,7 +71,7 @@ export class WPInitializer extends LitElement {
   }
 
   render() {
-    return html`<div class="loader"></div>`
+    return html`<div><slot></slot></div>`; //html`<div class="loader"></div>`
   }
 }
 
