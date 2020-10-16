@@ -27,7 +27,7 @@ export class WPVisualizer extends LitElement {
       top: 0px;
       right: 0px;
       bottom: 0px;
-      z-index: -1;
+      z-index: 0;
     }
     canvas {
       image-rendering: pixelated;
@@ -35,7 +35,8 @@ export class WPVisualizer extends LitElement {
       height: 160%;
       fill: var(--p-col-l);
       color: var(--s-col-l);
-      background-color: var(--a-col);
+      border-color: var(--a-col);
+      border: 0px;
     }`;
   }
 
@@ -82,7 +83,7 @@ export class WPVisualizer extends LitElement {
           const grd = ctx.createLinearGradient(0, 0, 0, range);
           grd.addColorStop(1, style.getPropertyValue('color'));
           grd.addColorStop(1.0-(i/range), style.getPropertyValue('fill'));
-          grd.addColorStop(0, style.getPropertyValue('background-color'));
+          grd.addColorStop(0, style.getPropertyValue('border-color'));
           this.grads.push(grd)
         }
       }

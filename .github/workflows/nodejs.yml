@@ -52,7 +52,7 @@ jobs:
     - run: npm run build-doc
       if: env.PUBLISH == 'true'
       # fallback
-    - run: cp dist-app/index.html dist-app/404.html
+    - run: cp dist-doc/index.html dist-doc/404.html
       if: ${{ env.PUBLISH == 'true' && !(env.NEXT == 'true') }}
       # only on next
     # #- run: npm run build-doc&&cp dist-doc/next/index.html dist-doc/404.html
@@ -63,5 +63,5 @@ jobs:
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         target_branch: gh-pages
-        publish_dir: dist-app
+        publish_dir: dist-doc
         keep_files: true

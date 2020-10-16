@@ -10,14 +10,17 @@
     "url": "https://github.com/sijakret/drive-audio.git"
   },
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "npm run dev-doc",
+    "dev-doc": "webpack-dev-server --config webpack.config.doc",
+    "dev-app": "webpack-dev-server --config webpack.config.app",
     "test-base": "karma start karma.conf.js",
     "test": "npm run test-base -- --single-run",
     "test-dev": "npm run test-base -- --no-single-run --browsers Chrome",
     "test-bundle": "npm pack&&npm install --prefix test/bundle&&npm test --prefix test/bundle",
     "build": "tsc",
     "prepublish": "npm run build",
-    "build-doc": "webpack --mode production"
+    "build-doc": "webpack --mode production --config webpack.config.doc",
+    "build-app": "webpack --mode production --config webpack.config.app"
   },
   "author": "Jan Kretschmer",
   "license": "MIT",
