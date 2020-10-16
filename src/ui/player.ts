@@ -62,17 +62,17 @@ export class WPPlayer extends LitElement {
     :host {
       -webkit-tap-highlight-color: transparent;
       --height: 26px;
-      --primary-color: 214,93,188;
-      --secondary-color: 170,227,234;
+      --prim-color: var(--primary-color, 214,93,188);
+      --sec-color: var(--secondary-color, 170,227,234);
       --alt-color: 255,255,255;
     }
     :host {
-      --s-col: rgba(var(--secondary-color), 1.0);
-      --s-col-l: rgba(var(--secondary-color), 0.3);
-      --p-col: rgba(var(--primary-color), 1.0);
-      --p-col-h: rgba(var(--primary-color), 0.7);
-      --p-col-l: rgba(var(--primary-color), 0.3);
-      --p-col-t: rgba(var(--primary-color), 0);
+      --s-col: rgba(var(--sec-color), 1.0);
+      --s-col-l: rgba(var(--sec-color), 0.3);
+      --p-col: rgba(var(--prim-color), 1.0);
+      --p-col-h: rgba(var(--prim-color), 0.7);
+      --p-col-l: rgba(var(--prim-color), 0.3);
+      --p-col-t: rgba(var(--prim-color), 0);
       --a-col: rgba(var(--alt-color), 1);
     }
 
@@ -235,9 +235,8 @@ export class WPPlayer extends LitElement {
         ${this.player.playing ? this.renderVisualizer : ''}
         ${this.renderSeek}
         ${this.player.loading ? html`
-        <drive-audio-initializer>${
-          (this.player as any).progress || 'loading..'
-        }</drive-audio-initializer>
+        <drive-audio-initializer .progress=${(this.player as any).progress}>
+        </drive-audio-initializer>
         ` : this.trackTitle}
       </div>
       ${until(this.time, html``)}

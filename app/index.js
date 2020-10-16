@@ -20,12 +20,14 @@ class Component extends router() {
     </header>`
     )}
     ${
-      this.route === 'Landing' ?
-        html`<drive-audio-folder
-        folderId="1bMhdqWhVxMsz2qkKJNAVQokfhYvPR5ND"
-        apiKey="AIzaSyDRbhyb-TWaXC4yYxksZB_5KekU4ujzLO4">
-      </drive-audio-folder>
-        `: this.page}
+      this.params.folderId ?
+        html`<div player>
+        <drive-audio-folder
+          folderId=${this.params.folderId}
+          apiKey="AIzaSyDRbhyb-TWaXC4yYxksZB_5KekU4ujzLO4">
+        </drive-audio-folder>
+        </div>
+        `: 'noid'}
     </div>`;
   }
 

@@ -9,11 +9,7 @@ import { scrolly } from './utils';
 const routes = [
   {
     name: 'Landing',
-    pattern: PUBLIC_PATH
-  },
-  {
-    name: 'Landing',
-    pattern: PUBLIC_PATH.slice(0,-1)
+    pattern: '/:folderId'
   },
   {
     name: 'not-foud',

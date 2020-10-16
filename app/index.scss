@@ -1,10 +1,12 @@
 body, html {
-  font-family: Roboto;
+  font-family: Arial;
   font-size: 14px;
   display: flex;
   flex-direction: column;
-  --theme-color: rgb(214, 93, 188); 
-  --theme-color-trans-opaque: #aae3ea;
+  --primary-color: 100, 224, 185;
+  --secondary-color: 255, 255, 255;
+  --theme-color: rgb(var(--primary-color)); 
+  --theme-color-trans-opaque: rgb(var(--secondary-color));
   --bg-color: #FFFFFF; 
   --font-color: #000000;  
   padding: 0px;
@@ -14,9 +16,7 @@ body, html {
   flex: 1 1;
 }
 
-code {
-  color: var(--theme-color);
-}
+
 
 doc-app, doc-app > div {
   flex: 1 1;
@@ -31,6 +31,7 @@ doc-app, doc-app > div {
   overflow: hidden;
   height: 100%;
 }
+
 
 svg {
   fill: var(--bg-color);
@@ -185,32 +186,6 @@ content {
   a:visited {
     color: var(--theme-color);
   }
-  blockquote {
-    margin: 2em 0;
-    margin-left: 10px;
-    padding: 4px;
-    padding-left: 20px;
-    border-left: 4px solid var(--theme-color);
-    background: #f8f8f8;
-    position: relative;
-    > p:after {
-        content: "!";
-        background-color: var(--theme-color);
-        position: absolute;
-        top: calc(50% - 10px);
-        left: -12px;
-        color: #fff;
-        width: 20px;
-        height: 20px;
-        border-radius: 100%;
-        text-align: center;
-        line-height: 20px;
-        font-weight: bold;
-        font-family: "Dosis", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
-        font-size: 14px;
-      
-    }
-  }
 }
 
 [app] {
@@ -224,8 +199,14 @@ a {
 a:visited {
   color: inherit;
 }
+
+[player] {
+  margin: auto;
+}
+
 drive-audio-folder {
-  margin: 20px;
+  margin: 30px;
+  max-width: 400px;
 }
 
 [app] {
@@ -296,101 +277,6 @@ drive-audio-folder {
   }
 }
 
-doc-demo {
-  .result {
-    margin: 5px;
-    padding: 5px;
-    margin-bottom: 20px;
-    /*border-top: 1px solid rgba(0,0,0,0.2);*/
-  }
-}
-
-[short], [teaser] {
-  flex: 1 1;
-  position: relative;
-  font-size: 18px;
-  height: 100%;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  > div {
-    flex: 1 1;
-    margin: auto;
-  }
-}
-[short] {
-  > div {
-    margin-top: 0px;
-    margin-bottom: 80px;
-    margin-left: 60px;
-    margin-right: 0px;
-  }
-}
-[teaser] {
-  > div {
-    max-width: 400px;
-    margin-left: 0px;
-    margin-right: 80px;
-  }
-}
-
-.fixed {
-  position: fixed;
-}
-.absolute {
-  position: absolute;
-}
-.top {
-  z-index: 2;
-}
-.transformOriginTop {
-  transform-origin: 50% 0px;
-}
-
-
-.hljs {
-  font-size: 12px;
-  border-radius: 4px;
-  padding: 10px !important;
-  margin: 2px;
-  margin-top: 12px;
-  box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-
-  code {
-    color: inherit;
-  }
-}
-
-[stackblitz] {
-  float: right;
-  font-size: 12px;
-  --sb-color1: #1389FD;
-  --sb-color2: #ffffff;
-  cursor: pointer;
-  transition: all 0.5s;
-  svg {
-    fill: var(--sb-color1);
-    margin-bottom: -7px;
-  }
-  color: var(--sb-color1);
-  background: var(--sb-color2);
-  border: 2px solid var(--sb-color1);
-  border-radius: 6px;
-  padding: 4px;
-  padding-right: 12px;
-  line-height: 20px;
-  margin-top: -6px;
-  vertical-align: center;
-}
-
-[stackblitz]:hover {
-  background: var(--sb-color1);
-  color: var(--sb-color2);
-  border: 2px solid var(--sb-color2);
-  svg {
-    fill: var(--sb-color2);
-  }
-}
 
 
 @media screen and (max-width: 980px) {

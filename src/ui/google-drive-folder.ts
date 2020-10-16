@@ -1,5 +1,5 @@
 import {LitElement, html, css, property, customElement} from 'lit-element';
-import {getFolder} from '../adapters/google-drive/google-drive';
+import {getFileMeta, getFilesForFolder} from '../adapters/google-drive/google-drive';
 
 // import './initializer';
 // import {transition, slide, mark} from 'lit-transition';
@@ -9,6 +9,7 @@ export class WPGoogleDriveFolder extends LitElement {
   @property() folderId:string = '';
   @property() apiKey:string = '';
   @property() filter:string = '.mp3$';
+  @property() name:string = 'unknown folder';
   @property() files:Array<any> = [];
   @property() sort = (a:any,b:any) => {
     return a.name.localeCompare(b.name);
@@ -17,7 +18,7 @@ export class WPGoogleDriveFolder extends LitElement {
   static get styles() {
     return css`
     drive-audio-player {
-      margin: 7px;
+      margin-bottom: 7px;
     }
     `;
   }
@@ -29,7 +30,9 @@ export class WPGoogleDriveFolder extends LitElement {
   async updated(changed:Map<string,boolean>) {
     if(changed.has('url') || changed.has('apiKey')) {
       this.files = [];
-      const {files} = await getFolder(this.folderId, {apiKey: this.apiKey});
+      const {name} = await getFileMeta(this.folderId, {apiKey: this.apiKey});
+      this.name = name;
+      const {files} = await getFilesForFolder(this.folderId, {apiKey: this.apiKey});
       files.sort(this.sort);
       this.files = files;
 
@@ -41,6 +44,7 @@ export class WPGoogleDriveFolder extends LitElement {
    */
   render() {
     return html`<div>
+    <h2>${this.name}</h2>
     ${this.players}
     </div>`;
   }

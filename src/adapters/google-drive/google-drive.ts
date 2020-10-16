@@ -2,12 +2,13 @@
 import {cacheAdd,cacheHit} from '../../cache';
 import axios from 'axios';
 
-export async function getFolder(folderId: String, {apiKey} : any = {}) {
+export async function getFilesForFolder(folderId: String, {apiKey} : any = {}) {
   const folder = await fetch(
     `https://www.googleapis.com/drive/v3/files/?q=${
     encodeURIComponent(`'${folderId}' in parents`)
     }&key=${apiKey}`);
-  return folder.json();
+  const json = await folder.json();
+  return json;
 }
 
 export async function getFileMeta(fileId: string, {apiKey, cached = true} : any = {}) {

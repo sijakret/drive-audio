@@ -1,77 +1,32 @@
-import {LitElement, html, css, customElement} from 'lit-element';
+import {LitElement, property, html, css, customElement} from 'lit-element';
+import {styleMap} from 'lit-html/directives/style-map';
 
 @customElement('drive-audio-initializer')
 export class WPInitializer extends LitElement {
+  @property() progress:number = 0
 
   static get styles() {
     return css`
-    .loader,
-.loader:before,
-.loader:after {
-  top: -24px;
-  width: 10px;
-  height: 10px;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation: load7 1.8s infinite ease-in-out;
-  animation: load7 1.8s infinite ease-in-out;
-}
-.loader {
-  color: var(--p-col-h);
-  font-size: 10px;
-  margin: auto;
-  position: relative;
-  text-indent: -9999em;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
-}
-.loader:before,
-.loader:after {
-  content: '';
-  position: absolute;
-  top: 0px;
-}
-.loader:before {
-  left: -1.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
-}
-.loader:after {
-  left: 1.5em;
-}
-@-webkit-keyframes load7 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 2.5em 0 -1.3em;
-  }
-  40% {
-    box-shadow: 0 2.5em 0 0;
-  }
-}
-@keyframes load7 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 2.5em 0 -1.3em;
-  }
-  40% {
-    box-shadow: 0 2.5em 0 0;
-  }
-}
-    
-    div, :host {
+    :host {
       display: flex;
       width: 100%;
       height: var(--height);
+    }
+    [seek] {
+      pointer-events: none;
+      transition: all 0.2s;
+      background-color: var(--p-col-h);
+      position: absolute;
+      left: 0px;
+      bottom: 8px;
+      top: 8px;
     }`;
   }
 
   render() {
-    return html`<div><slot></slot></div>`; //html`<div class="loader"></div>`
+    const progress = this.progress;
+    const percent = 100 * progress;
+    return html`<div seek style=${styleMap({width: percent+'%'})}></div>`;
   }
 }
 
