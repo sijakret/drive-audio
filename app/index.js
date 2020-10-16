@@ -4,6 +4,7 @@ import { html } from 'lit-element';
 import {cache} from 'lit-html/directives/cache';
 import router from './router';
 import github from './assets/github.svg';
+
 import {version} from './version';
 import {name} from '../package.json';
 
@@ -16,38 +17,24 @@ class Component extends router() {
     <div app>
     ${cache(
       html`<header>
+      <span>${version}</span>
       <a href=https://github.com/sijakret/drive-audio>${github}</a>
-    </header>`
+    </header>
+    `
     )}
+    <div player>
     ${
       this.params.folderId ?
-        html`<div player>
+        html`
         <drive-audio-folder
           folderId=${this.params.folderId}
           apiKey="AIzaSyDRbhyb-TWaXC4yYxksZB_5KekU4ujzLO4">
         </drive-audio-folder>
-        </div>
-        `: 'noid'}
+        
+        `: html`
+        <h2>todo</h2><input placeholder="paste google drive folder link or id"/>`}
+      </div>
     </div>`;
-  }
-
-  get nav() {
-    return index.map(i => {
-      const active = this.route===i.title;
-      return [
-        html`<a href=${i.route} ?active=${active}>${i.title}</a>`,
-        // subsections
-        active ? html`<ul>
-          ${i.index.map((s,j) => html`<li>
-          <a href=${`${i.route}#sec-${j}`}>${s}</a>
-          </li>` )}
-        </ul>` : undefined
-      ]
-    });
-  }
-  
-  get page() {
-    return this.renderContent
   }
 }
 

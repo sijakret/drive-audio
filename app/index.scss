@@ -202,11 +202,14 @@ a:visited {
 
 [player] {
   margin: auto;
+  max-width: 400px;
+  input {
+    width: 100%;
+  }
 }
 
-drive-audio-folder {
+drive-audio-folder, input {
   margin: 30px;
-  max-width: 400px;
 }
 
 [app] {
