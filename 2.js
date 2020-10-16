@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{212:function(n,i,o){"use strict";o.r(i),o.d(i,"_code",(function(){return e})),o.d(i,"_html",(function(){return r}));o(15);const e="// js\nimport 'drive-audio';",r='<drive-audio-player\n  url="https://drive.google.com/file/d/1kY2PkRGa116ubnpkWbx9PjLKsmERKLnU/view?usp=sharing"></drive-audio-player>'}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{239:function(n,i,o){"use strict";o.r(i),o.d(i,"_code",(function(){return e})),o.d(i,"_html",(function(){return r}));o(25);const e="// js\nimport 'drive-audio';",r='<drive-audio-player\n  url="https://drive.google.com/file/d/1kY2PkRGa116ubnpkWbx9PjLKsmERKLnU/view?usp=sharing"></drive-audio-player>'}}]);
 //# sourceMappingURL=2.js.map
