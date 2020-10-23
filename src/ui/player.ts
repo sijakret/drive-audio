@@ -12,7 +12,7 @@ import svgStop from './assets/stop.svg';
 
 import './initializer';
 import './visualizer';
-import {transition, slide, mark} from 'lit-transition';
+//import {transition, slide, mark} from 'lit-transition';
 
 const MOBILE = mobileCheck();
 
@@ -34,6 +34,7 @@ export class WPPlayer extends LitElement {
   @property() url:String = '';
   @property({attribute: false}) player?:IAudioPlayer;
   @property({attribute: false}) timeLeft:string = '';
+  @property() prefetch:boolean = false;
   @property() hover:any = undefined;
 
   public stop() {
@@ -62,18 +63,18 @@ export class WPPlayer extends LitElement {
     :host {
       -webkit-tap-highlight-color: transparent;
       --height: 26px;
-      --prim-color: var(--primary-color, 214,93,188);
-      --sec-color: var(--secondary-color, 170,227,234);
-      --alt-color: 255,255,255;
+      --prim-color: var(--primary-color, 295, 100%, 72%);
+      --sec-color: var(--secondary-color, 237, 100%, 72%);
+      --alt-color: 100, 100%, 100%;
     }
     :host {
-      --s-col: rgba(var(--sec-color), 1.0);
-      --s-col-l: rgba(var(--sec-color), 0.3);
-      --p-col: rgba(var(--prim-color), 1.0);
-      --p-col-h: rgba(var(--prim-color), 0.7);
-      --p-col-l: rgba(var(--prim-color), 0.3);
-      --p-col-t: rgba(var(--prim-color), 0);
-      --a-col: rgba(var(--alt-color), 1);
+      --s-col: hsla(var(--sec-color), 1.0);
+      --s-col-l: hsla(var(--sec-color), 0.3);
+      --p-col: hsla(var(--prim-color), 1.0);
+      --p-col-h: hsla(var(--prim-color), 0.7);
+      --p-col-l: hsla(var(--prim-color), 0.3);
+      --p-col-t: hsla(var(--prim-color), 0);
+      --a-col: hsla(var(--alt-color), 1);
     }
 
     slot {
@@ -155,8 +156,8 @@ export class WPPlayer extends LitElement {
       background-color: var(--p-col-h);
       position: absolute;
       left: 0px;
-      bottom: 2px;
-      height: 2px;
+      bottom: 0px;
+      height: 4px;
     }`;
   }
 
@@ -172,6 +173,12 @@ export class WPPlayer extends LitElement {
       }
       // create and hook up new player
       this.player = derivePlayer(this.url);
+
+      const p = this.player as any;
+      if(p.prefetch) {
+        p.prefetch();
+      }
+      
       EVENTS.forEach(event => 
         this.player?.addEventListener(event, (e) => this.listener(e)))
     }
@@ -271,10 +278,8 @@ export class WPPlayer extends LitElement {
       : this.player.duration);
     const hover = this.hover !== undefined ? formatMs(this.hover * this.player?.duration) : '';
     return html`<div time>
-      ${transition(
-        hover ? mark(html`<span>${hover}</span>`,'hover'): 
-        mark(html`<span>${time}</span>`,'left')
-        , slide)}
+      ${hover ? html`<span>${hover}</span>`: 
+        html`<span>${time}</span>`}
       </div>`;
   }
 

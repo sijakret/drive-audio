@@ -26,6 +26,12 @@ export async function getFileMeta(fileId: string, {apiKey, cached = true} : any 
   return meta;
 }
 
+export function getFileUrl(fileId: String, {
+  apiKey
+} : any = {}) {
+  return `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
+}
+
 export async function getFileBuffer(fileId: String, {
     apiKey,
     cached = true,
@@ -40,7 +46,7 @@ export async function getFileBuffer(fileId: String, {
   // progress wrapper
   const blob = (await axios({
     responseType: 'blob',
-    url: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`,
+    url: getFileUrl(fileId, {apiKey}),
     onDownloadProgress: progress => {
       onProgress && onProgress(progress.loaded / progress.total);
     }

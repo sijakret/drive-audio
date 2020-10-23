@@ -1,3 +1,5 @@
 
-export * from './ui/player';
-export * from './ui/google-drive-folder';
+import './ui/player';
+import './ui/google-drive-folder';
+
+export * from './adapters/google-drive/google-drive';

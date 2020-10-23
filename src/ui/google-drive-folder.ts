@@ -1,16 +1,15 @@
 import {LitElement, html, css, property, customElement} from 'lit-element';
 import {getFileMeta, getFilesForFolder} from '../adapters/google-drive/google-drive';
 
-// import './initializer';
-// import {transition, slide, mark} from 'lit-transition';
-
 @customElement('drive-audio-folder')
 export class WPGoogleDriveFolder extends LitElement {
   @property() folderId:string = '';
   @property() apiKey:string = '';
   @property() filter:string = '.mp3$';
   @property() name:string = 'unknown folder';
-  @property() files:Array<any> = [];
+  @property() prefetch:boolean = false;
+  @property() customTag?:string;
+  @property() _files:Array<any> = [];
   @property() sort = (a:any,b:any) => {
     return a.name.localeCompare(b.name);
   };
@@ -23,19 +22,30 @@ export class WPGoogleDriveFolder extends LitElement {
     `;
   }
 
+  get files() {
+    const pattern = new RegExp(this.filter, 'i');
+    return this._files.filter(f => !!f.name.match(pattern));
+  }
+
   /**
    * init media adapter
    * @param changed 
    */
   async updated(changed:Map<string,boolean>) {
     if(changed.has('url') || changed.has('apiKey')) {
-      this.files = [];
+      this._files = [];
       const {name} = await getFileMeta(this.folderId, {apiKey: this.apiKey});
       this.name = name;
       const {files} = await getFilesForFolder(this.folderId, {apiKey: this.apiKey});
-      files.sort(this.sort);
-      this.files = files;
-
+      if(files) {
+        this.dispatchEvent(new CustomEvent('files', {
+          detail: files,
+          bubbles: true,
+          composed: true
+        }))
+        files.sort(this.sort);
+        this._files = files;
+      }
     }
   }
 
@@ -49,6 +59,10 @@ export class WPGoogleDriveFolder extends LitElement {
     </div>`;
   }
 
+  createRenderRoot() {
+    return this;
+  }
+
   /**
    * finish hook, play next
    */
@@ -56,11 +70,11 @@ export class WPGoogleDriveFolder extends LitElement {
     const next = (this.files.findIndex(i => i.id === id) + 1 )
       % this.files.length;
     this.files.forEach(f => {
-      const player = (this.shadowRoot?.querySelector(`[name="${f.id}"]`) as any)
+      const player = (this.renderRoot.querySelector(`[name="${f.id}"]`) as any)
       player.stop();
     });
 
-    const player = (this.shadowRoot?.querySelector(`[name="${this.files[next].id}"]`) as any);
+    const player = (this.renderRoot.querySelector(`[name="${this.files[next].id}"]`) as any);
     player.play();
   }
 
@@ -70,7 +84,7 @@ export class WPGoogleDriveFolder extends LitElement {
    */
   private playTrack(id:string) {
     this.files.filter(f => f.id !== id).forEach(f => {
-      const player = (this.shadowRoot?.querySelector(`[name="${f.id}"]`) as any)
+      const player = (this.renderRoot.querySelector(`[name="${f.id}"]`) as any)
       player.stop();
     });
   }
@@ -78,11 +92,10 @@ export class WPGoogleDriveFolder extends LitElement {
    * render players
    */
   get players() {
-    const pattern = new RegExp(this.filter, 'i');
-    const filtered = this.files.filter(f => f.name.match(pattern));
-    return filtered.map(f => {
+    return this.files.map(f => {
         const url = 'https://drive.google.com/file/d/'+f.id;
         return html `<drive-audio-player name=${f.id} 
+        ?prefetch=${this.prefetch}
         @ended=${() => this.trackEnded(f.id)}
         @play=${() => this.playTrack(f.id)}
         url=${url}>

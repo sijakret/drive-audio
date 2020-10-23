@@ -8,7 +8,29 @@ const outDir = process.env.NEXT ?
 'next/' : '';
 
 
-module.exports =  function(type, publicPath = '') {
+module.exports =  function(type, {
+  publicPath = '',
+  plugins = [
+    new EnvironmentPlugin(['NEXT','DEBUG']),
+    new DefinePlugin({
+      'PUBLIC_PATH': JSON.stringify(publicPath)
+    }),
+    new HtmlWebpackPlugin({
+      template: `${type}/index.html`,
+      chunks: [type],
+      inject: true
+    }),
+    new CopyPlugin([
+      {
+        from: `${type}/assets`,
+        to: 'assets'
+      },
+    ]),
+    new FaviconsWebpackPlugin(
+      path.join(__dirname, `${type}/assets/favicon.svg`)
+    )
+  ] 
+} = {}) {
 
   // to build 'previews'
   publicPath += outDir;
@@ -31,19 +53,29 @@ module.exports =  function(type, publicPath = '') {
         disableDotRule: true
       },
     },
-    node: {
-      child_process: 'empty',
-      fs: 'empty',
-      crypto: 'empty',
-      net: 'empty',
-      tls: 'empty',
-      http2: 'empty'
-    },
+    // node: {
+    //   fs: 'empty',
+    //   crypto: 'empty',
+    //   net: 'empty',
+    //   tls: 'empty',
+    //   http2: 'empty'
+    // },
     resolve: {
       alias: {
         'drive-audio': path.resolve(__dirname,'src')
       },
       extensions: [ '.ts', '.js' ],
+      fallback: {
+        "util": false,
+        "zlib": false,
+        "stream": false,
+        "http": false,
+        "https": false,
+        "assert": false,
+        "tty": false,
+        "os": false,
+        "process": false
+      }
     },
     module: {
       rules: [
@@ -98,27 +130,7 @@ module.exports =  function(type, publicPath = '') {
         }
       ],
     },
-
-    plugins: [
-      new EnvironmentPlugin(['NEXT','DEBUG']),
-      new DefinePlugin({
-        'PUBLIC_PATH': JSON.stringify(publicPath)
-      }),
-      new HtmlWebpackPlugin({
-        template: `${type}/index.html`,
-        chunks: [type],
-        inject: true
-      }),
-      new CopyPlugin([
-        {
-          from: `${type}/assets`,
-          to: 'assets'
-        },
-      ]),
-      new FaviconsWebpackPlugin(
-        path.join(__dirname, `${type}/assets/favicon.svg`)
-      )
-    ]
+    plugins
   };
 
   return config;

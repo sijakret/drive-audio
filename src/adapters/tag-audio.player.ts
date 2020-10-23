@@ -25,6 +25,10 @@ export class TagAudioPlayer extends IAudioPlayer {
     return !!url;
   }
 
+  prefetch() {
+    this.load();
+  }
+
   init() {
     if(!this._context) {
       document.body.appendChild(this._tag);
